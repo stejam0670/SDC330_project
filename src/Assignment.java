@@ -47,6 +47,14 @@ public abstract class Assignment implements Trackable {
         return description;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public LocalDate getDueDate() {
         return dueDate;
     }
@@ -55,12 +63,24 @@ public abstract class Assignment implements Trackable {
         return dueDate.toString();
     }
 
+    public void setDueDate(String dueDate) {
+        this.dueDate = parseDate(dueDate);
+    }
+
     public int getAssignmentTypeId() {
         return assignmentTypeId;
     }
 
+    public void setAssignmentTypeId(int assignmentTypeId) {
+        this.assignmentTypeId = assignmentTypeId;
+    }
+
     public int getCourseId() {
         return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     @Override
@@ -89,6 +109,14 @@ public abstract class Assignment implements Trackable {
         LocalDate upcomingWindowEnd = today.plusDays(7);
         return !completed && (dueDate.isEqual(today)
             || (dueDate.isAfter(today) && (dueDate.isBefore(upcomingWindowEnd) || dueDate.isEqual(upcomingWindowEnd))));
+    }
+
+    /**
+     * Standard assignments do not use an extra deadline column.
+     * Discussion board assignments override this for reply_due_date storage.
+     */
+    public String getReplyDueDateForDatabase() {
+        return null;
     }
 
     public abstract String getAssignmentDetails();

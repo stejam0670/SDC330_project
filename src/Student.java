@@ -24,6 +24,18 @@ public class Student {
         return id;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
     public void addCourse(Course course) {
         courses.add(course);
     }

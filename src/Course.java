@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class Course {
     private int id;
+    private int studentId;
     private String courseName;
     private String courseCode;
     private String semester;
@@ -14,9 +15,10 @@ public class Course {
     private String termEndDate;
     private List<Assignment> assignments;
 
-    public Course(int id, String courseName, String courseCode, String semester,
+    public Course(int id, int studentId, String courseName, String courseCode, String semester,
                   String termStartDate, String termEndDate) {
         this.id = id;
+        this.studentId = studentId;
         this.courseName = courseName;
         this.courseCode = courseCode;
         this.semester = semester;
@@ -29,12 +31,28 @@ public class Course {
         return id;
     }
 
+    public int getStudentId() {
+        return studentId;
+    }
+
     public String getCourseName() {
         return courseName;
     }
 
     public String getCourseCode() {
         return courseCode;
+    }
+
+    public String getSemester() {
+        return semester;
+    }
+
+    public String getTermStartDate() {
+        return termStartDate;
+    }
+
+    public String getTermEndDate() {
+        return termEndDate;
     }
 
     public void addAssignment(Assignment assignment) {

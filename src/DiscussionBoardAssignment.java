@@ -6,34 +6,27 @@ import java.time.LocalDate;
  */
 public class DiscussionBoardAssignment extends Assignment {
     private LocalDate replyDueDate;
-    private int requiredReplies;
-    private int submittedReplies;
 
     public DiscussionBoardAssignment(int id, String title, String description, String dueDate,
                                      boolean completed, int assignmentTypeId, int courseId,
-                                     String replyDueDate, int requiredReplies, int submittedReplies) {
+                                     String replyDueDate) {
         super(id, title, description, dueDate, completed, assignmentTypeId, courseId);
-        this.replyDueDate = LocalDate.parse(replyDueDate);
-        this.requiredReplies = requiredReplies;
-        this.submittedReplies = submittedReplies;
+        this.replyDueDate = parseReplyDueDate(replyDueDate);
+    }
+
+    private LocalDate parseReplyDueDate(String replyDueDate) {
+        if (replyDueDate == null || replyDueDate.isBlank()) {
+            return null;
+        }
+        return LocalDate.parse(replyDueDate);
     }
 
     public String getReplyDueDateAsString() {
-        return replyDueDate.toString();
+        return replyDueDate == null ? "" : replyDueDate.toString();
     }
 
-    public int getRequiredReplies() {
-        return requiredReplies;
-    }
-
-    public int getSubmittedReplies() {
-        return submittedReplies;
-    }
-
-    public void submitReply() {
-        if (submittedReplies < requiredReplies) {
-            submittedReplies++;
-        }
+    public void setReplyDueDate(String replyDueDate) {
+        this.replyDueDate = parseReplyDueDate(replyDueDate);
     }
 
     /**
@@ -42,7 +35,8 @@ public class DiscussionBoardAssignment extends Assignment {
      */
     @Override
     public boolean isOverdue() {
-        return !isCompleted() && replyDueDate.isBefore(LocalDate.now());
+        LocalDate deadlineToCheck = replyDueDate == null ? getDueDate() : replyDueDate;
+        return !isCompleted() && deadlineToCheck.isBefore(LocalDate.now());
     }
 
     /**
@@ -62,11 +56,19 @@ public class DiscussionBoardAssignment extends Assignment {
             || (getDueDate().isAfter(today)
             && (getDueDate().isBefore(upcomingWindowEnd) || getDueDate().isEqual(upcomingWindowEnd)));
 
-        boolean replyUpcoming = replyDueDate.isEqual(today)
-            || (replyDueDate.isAfter(today)
-            && (replyDueDate.isBefore(upcomingWindowEnd) || replyDueDate.isEqual(upcomingWindowEnd)));
+        boolean replyUpcoming = false;
+        if (replyDueDate != null) {
+            replyUpcoming = replyDueDate.isEqual(today)
+                || (replyDueDate.isAfter(today)
+                && (replyDueDate.isBefore(upcomingWindowEnd) || replyDueDate.isEqual(upcomingWindowEnd)));
+        }
 
         return postUpcoming || replyUpcoming;
+    }
+
+    @Override
+    public String getReplyDueDateForDatabase() {
+        return getReplyDueDateAsString();
     }
 
     @Override
@@ -75,9 +77,7 @@ public class DiscussionBoardAssignment extends Assignment {
             + "\nTitle: " + getTitle()
             + "\nDescription: " + getDescription()
             + "\nInitial Post Due Date: " + getDueDateAsString()
-            + "\nReply Due Date: " + getReplyDueDateAsString()
-            + "\nRequired Replies: " + requiredReplies
-            + "\nSubmitted Replies: " + submittedReplies
+            + "\nReply Due Date: " + (replyDueDate == null ? "Not set" : getReplyDueDateAsString())
             + "\nCompleted: " + isCompleted();
     }
 }

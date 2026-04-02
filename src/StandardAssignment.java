@@ -15,6 +15,10 @@ public class StandardAssignment extends Assignment {
         return typeName;
     }
 
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
     @Override
     public String getAssignmentDetails() {
         return "Assignment ID: " + getId()

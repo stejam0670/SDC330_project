@@ -17,6 +17,6 @@ public class AssignmentType {
 
     @Override
     public String toString() {
-        return "AssignmentType{id=" + id + ", typeName='" + typeName + "'}";
+        return "Assignment Type ID: " + id + " | Name: " + typeName;
     }
 }
